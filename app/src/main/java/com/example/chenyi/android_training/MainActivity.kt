@@ -11,7 +11,7 @@ import android.graphics.Movie
 import android.support.v17.leanback.widget.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity()  {
 
     private var mBrowseFragment: BrowseFragment? = null
     private lateinit var mRowsAdapter: ArrayObjectAdapter
