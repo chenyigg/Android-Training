@@ -15,8 +15,6 @@ import java.util.concurrent.ConcurrentHashMap
 import com.example.chenyi.android_training.util.MediaIDHelper.MEDIA_ID_MUSICS_BY_GENRE
 import com.example.chenyi.android_training.util.MediaIDHelper.MEDIA_ID_ROOT
 
-
-
 /**
  * 简单的音乐数据提供者，真实的音乐数据委托给 MusicProviderSource 来获取
  * Created by chenyi on 17-8-9.
@@ -107,7 +105,6 @@ class MusicProvider(var mSource: MusicProviderSource = RemoteJSONSource()) {
 
     /**
      * Return the MediaMetadataCompat for the given musicID.
-
      * @param musicId The unique, non-hierarchical music ID.
      */
     fun getMusic(musicId: String): MediaMetadataCompat? {
@@ -190,12 +187,11 @@ class MusicProvider(var mSource: MusicProviderSource = RemoteJSONSource()) {
             if (mCurrentState == State.NON_INITIALIZED) {
                 mCurrentState = State.INITIALIZING
 
-                val tracks = mSource.iterator()
-                while (tracks.hasNext()) {
-                    val item = tracks.next()
-                    val musicId = item.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID)
-                    mMusicListById[musicId] = MutableMediaMetadata(musicId, item)
+                mSource.iterator().forEach {
+                    val musicId = it.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID)
+                    mMusicListById[musicId] = MutableMediaMetadata(musicId, it)
                 }
+
                 buildListsByGenre()
                 mCurrentState = State.INITIALIZED
             }
@@ -215,16 +211,16 @@ class MusicProvider(var mSource: MusicProviderSource = RemoteJSONSource()) {
             return mediaItems
         }
 
-        if (MEDIA_ID_ROOT == mediaId) {
-            mediaItems.add(createBrowsableMediaItemForRoot(resources))
-        } else if (MEDIA_ID_MUSICS_BY_GENRE == mediaId) {
-            getGenres().mapTo(mediaItems) { createBrowsableMediaItemForGenre(it, resources) }
-        } else if (mediaId.startsWith(MEDIA_ID_MUSICS_BY_GENRE)) {
-            val genre = MediaIDHelper.getHierarchy(mediaId)[1]
-            getMusicsByGenre(genre).mapTo(mediaItems) { createMediaItem(it) }
-        } else {
-            LogHelper.w(TAG, "Skipping unmatched mediaId: ", mediaId)
+        when {
+            mediaId == MEDIA_ID_ROOT -> mediaItems.add(createBrowsableMediaItemForRoot(resources))
+            mediaId == MEDIA_ID_MUSICS_BY_GENRE -> getGenres().mapTo(mediaItems) { createBrowsableMediaItemForGenre(it, resources) }
+            mediaId.startsWith(MEDIA_ID_MUSICS_BY_GENRE) -> {
+                val genre = MediaIDHelper.getHierarchy(mediaId)[1]
+                getMusicsByGenre(genre).mapTo(mediaItems) { createMediaItem(it) }
+            }
+            else -> LogHelper.w(TAG, "Skipping unmatched mediaId: ", mediaId)
         }
+
         return mediaItems
     }
 

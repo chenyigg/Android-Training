@@ -69,12 +69,8 @@ object LogHelper {
                 messages[0].toString()
             } else {
                 val sb = StringBuilder()
-                for (m in messages) {
-                    sb.append(m)
-                }
-                t?.let {
-                    sb.append("\n").append(Log.getStackTraceString(t))
-                }
+                messages.forEach { sb.append(it) }
+                t?.let { sb.append("\n").append(Log.getStackTraceString(t)) }
                 sb.toString()
             }
             Log.println(level, tag, message)
