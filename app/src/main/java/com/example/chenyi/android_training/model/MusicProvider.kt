@@ -64,7 +64,7 @@ class MusicProvider(var mSource: MusicProviderSource = RemoteJSONSource()) {
         if (mCurrentState != State.INITIALIZED || !mMusicListByGenre.containsKey(genre)) {
             return emptyList()
         }
-        return mMusicListByGenre[genre]!!.asIterable()
+        return mMusicListByGenre[genre]?: emptyList()
     }
 
     /**
