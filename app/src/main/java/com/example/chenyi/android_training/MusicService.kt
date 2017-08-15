@@ -5,6 +5,7 @@ import android.media.session.MediaSession
 import android.os.Bundle
 import android.os.IBinder
 import android.service.media.MediaBrowserService
+import com.example.chenyi.android_training.playback.PlaybackManager
 import com.example.chenyi.android_training.util.LogHelper
 
 /**
@@ -22,6 +23,8 @@ class MusicService : MediaBrowserService() {
                             MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS)
         sessionToken = mSession.sessionToken
     }
+
+    val playback: PlaybackManager? = null
 
     override fun onLoadChildren(p0: String?, p1: Result<MutableList<MediaBrowser.MediaItem>>?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

@@ -41,17 +41,19 @@ class LocalPlayback(private val mMusicProvider: MusicProvider, context: Context)
     private var mAudioNoisyReceiverRegistered: Boolean = false
     private var mCurrentAudioFocusState = AUDIO_NO_FOCUS_NO_DUCK
     private val mAudioNoisyIntentFilter = IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
-    private val mAudioNoisyReceiver = { _: Context, intent: Intent ->
-        if (AudioManager.ACTION_AUDIO_BECOMING_NOISY == intent.action) {
-            LogHelper.d(TAG, "Headphones disconnected.")
+    private val mAudioNoisyReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (AudioManager.ACTION_AUDIO_BECOMING_NOISY == intent.action) {
+                LogHelper.d(TAG, "Headphones disconnected.")
                 if (isPlaying) {
 //                    val i = Intent(context, MusicService::class.java)
 //                    i.action = MusicService.ACTION_CMD
 //                    i.putExtra(MusicService.CMD_NAME, MusicService.CMD_PAUSE)
 //                    mContext.startService(i)
                 }
+            }
         }
-    } as BroadcastReceiver
+    }
 
     override var state: Int = 0
         get() {

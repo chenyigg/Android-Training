@@ -1,17 +1,18 @@
 package com.example.chenyi.android_training.playback
 
+import android.content.res.AssetFileDescriptor
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
+import com.example.chenyi.android_training.AlbumArtCache
 import com.example.chenyi.android_training.model.MusicProvider
 import com.example.chenyi.android_training.util.LogHelper
 import com.example.chenyi.android_training.util.MediaIDHelper
 import com.example.chenyi.android_training.util.QueueHelper
 import java.util.*
 
-import com.example.chenyi.android_training.AlbumArtCache
 import com.example.chenyi.android_training.R
 
 
@@ -151,9 +152,9 @@ class QueueManager(val mMusicProvider: MusicProvider,
         if (metadata.description.iconBitmap == null && metadata.description?.iconUri != null) {
             val albumUri = metadata.description.iconUri.toString()
 
-            AlbumArtCache.getInstance().fetch(albumUri, {
-                _: String, bitmap: Bitmap, icon: Bitmap -> {
-                    mMusicProvider.updateMusicArt(musicId, bitmap, icon)
+            AlbumArtCache.fetch(albumUri, object : AlbumArtCache.FetchListener() {
+                override fun onFetched(artUrl: String, bigImage: Bitmap, iconImage: Bitmap) {
+                    mMusicProvider.updateMusicArt(musicId, bigImage, iconImage)
 
                     // If we are still playing the same music, notify the listeners:
                     getCurrentMusic()?.description?.mediaId?.let {
@@ -164,7 +165,7 @@ class QueueManager(val mMusicProvider: MusicProvider,
                         }
                     }
                 }
-            } as AlbumArtCache.FetchListener)
+            })
         }
     }
 
