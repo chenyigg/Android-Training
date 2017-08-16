@@ -152,11 +152,11 @@ class MusicProvider(var mSource: MusicProviderSource = RemoteJSONSource()) {
      * Get the list of music tracks from a server and caches the track information
      * for future reference, keying tracks by musicId and grouping by genre.
      */
-    fun retrieveMediaAsync(callback: Callback?) {
+    fun retrieveMediaAsync(callback: (Boolean) -> Unit) {
         LogHelper.d(TAG, "retrieveMediaAsync called")
         if (mCurrentState == State.INITIALIZED) {
             // Nothing to do, execute callback immediately
-            callback?.onMusicCatalogReady(true)
+            callback.invoke(true)
             return
         }
 
@@ -168,7 +168,7 @@ class MusicProvider(var mSource: MusicProviderSource = RemoteJSONSource()) {
             }
 
             override fun onPostExecute(current: State) {
-                callback?.onMusicCatalogReady(current == State.INITIALIZED)
+                callback.invoke(current == State.INITIALIZED)
             }
         }.execute()
     }
@@ -204,7 +204,7 @@ class MusicProvider(var mSource: MusicProviderSource = RemoteJSONSource()) {
         }
     }
 
-    fun getChildren(mediaId: String, resources: Resources): List<MediaBrowserCompat.MediaItem> {
+    fun getChildren(mediaId: String, resources: Resources): MutableList<MediaBrowserCompat.MediaItem> {
         val mediaItems = ArrayList<MediaBrowserCompat.MediaItem>()
 
         if (!MediaIDHelper.isBrowseable(mediaId)) {
@@ -258,10 +258,6 @@ class MusicProvider(var mSource: MusicProviderSource = RemoteJSONSource()) {
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, hierarchyAwareMediaID)
                 .build()
         return MediaBrowserCompat.MediaItem(copy.description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
-    }
-
-    interface Callback {
-        fun onMusicCatalogReady(success: Boolean)
     }
 
     companion object {

@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import com.example.chenyi.android_training.MusicService
 import com.example.chenyi.android_training.R
 import com.example.chenyi.android_training.model.MusicProvider
 import com.example.chenyi.android_training.util.LogHelper
@@ -15,14 +14,14 @@ import com.example.chenyi.android_training.util.MediaIDHelper
 /**
  * Created by chenyi on 17-8-15.
  */
-class PlaybackManager(val serviceCallback: PlaybackServiceCallback,
-                      val resources: Resources,
+class PlaybackManager(val resources: Resources,
                       val musicProvider: MusicProvider,
                       val queueManager: QueueManager,
-                      var playback: Playback)
+                      var playback: Playback,
+                      val serviceCallback: PlaybackServiceCallback)
     : Playback.Callback {
 
-    private val mediaSessionCallback = MusicService.MediaSessionCallback()
+    val mediaSessionCallback = MediaSessionCallback()
 
     /**
      * Handle a request to play music
@@ -162,7 +161,7 @@ class PlaybackManager(val serviceCallback: PlaybackServiceCallback,
         val CUSTOM_ACTION_THUMBS_UP = "com.example.android.uamp.THUMBS_UP"
     }
 
-    private inner class MediaSessionCallback : MediaSessionCompat.Callback() {
+    inner class MediaSessionCallback : MediaSessionCompat.Callback() {
         override fun onPlay() {
             LogHelper.d(TAG, "play")
             if (queueManager.getCurrentMusic() == null) {

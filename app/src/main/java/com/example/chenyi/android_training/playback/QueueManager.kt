@@ -23,8 +23,8 @@ import com.example.chenyi.android_training.R
  * Created by chenyi on 17-8-14.
  */
 class QueueManager(val mMusicProvider: MusicProvider,
-                   val mListener: MetadataUpdateListener,
-                   val mResources: Resources) {
+                   val mResources: Resources,
+                   val mListener: MetadataUpdateListener) {
 
     var mPlayingQueue = Collections.synchronizedList(ArrayList<MediaSessionCompat.QueueItem>())
     var mCurrentIndex = 0
