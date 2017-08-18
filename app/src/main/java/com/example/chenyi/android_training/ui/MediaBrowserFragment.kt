@@ -38,7 +38,7 @@ class MediaBrowserFragment : Fragment() {
     private lateinit var mErrorMessage: TextView
 
     private var mMediaFragmentListener: MediaFragmentListener? = null
-    private var mMediaId: String?
+    var mMediaId: String?
         get() = arguments?.getString(ARG_MEDIA_ID)
         set(value) {
             val args = Bundle(1)

@@ -41,11 +41,11 @@ abstract class ActionBarActivity : AppCompatActivity() {
                         this@ActionBarActivity, R.anim.fade_in, R.anim.fade_out).toBundle()
 
                 val activityClass: Class<*>? = when (mItemToOpenWhenDrawerCloses) {
-//                    R.id.navigation_allmusic -> MusicPlayerActivity::class.java
+                    R.id.navigation_allmusic -> MusicPlayerActivity::class.java
 //                    R.id.navigation_playlists -> PlaceholderActivity::class.java
                     else -> null
                 }
-                if (activityClass != null) {
+                if (activityClass != null && activityClass != this@ActionBarActivity.javaClass) {
                     startActivity(Intent(this@ActionBarActivity, activityClass), extras)
                     finish()
                 }
@@ -177,9 +177,10 @@ abstract class ActionBarActivity : AppCompatActivity() {
             mDrawerLayout?.closeDrawers()
             true
         }
-//        if (MusicPlayerActivity::class.java!!.isAssignableFrom(javaClass)) {
-//            navigationView.setCheckedItem(R.id.navigation_allmusic)
-//        } else if (PlaceholderActivity::class.java!!.isAssignableFrom(javaClass)) {
+        if (MusicPlayerActivity::class.java!!.isAssignableFrom(javaClass)) {
+            navigationView.setCheckedItem(R.id.navigation_allmusic)
+        }
+//        else if (PlaceholderActivity::class.java!!.isAssignableFrom(javaClass)) {
 //            navigationView.setCheckedItem(R.id.navigation_playlists)
 //        }
     }

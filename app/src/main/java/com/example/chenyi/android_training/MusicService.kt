@@ -38,7 +38,7 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackManager.PlaybackServic
     private lateinit var mPlaybackManager: PlaybackManager
 
     private val mSession by lazy { MediaSessionCompat(this, "MusicService") }
-//    private var mMediaNotificationManager: MediaNotificationManager? = null
+    private var mMediaNotificationManager: MediaNotificationManager? = null
 //    private var mSessionExtras: Bundle? = null
     private val mDelayedStopHandler = DelayedStopHandler(this)
 //    private var mMediaRouter: MediaRouter? = null
@@ -82,7 +82,7 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackManager.PlaybackServic
         val playback = LocalPlayback(mMusicProvider, this)
         mPlaybackManager = PlaybackManager(resources, mMusicProvider, queueManager, playback, this)
 
-        setSessionToken(mSession.sessionToken)
+        sessionToken = mSession.sessionToken
         mSession.setCallback(mPlaybackManager.mediaSessionCallback)
         mSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
                 or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
