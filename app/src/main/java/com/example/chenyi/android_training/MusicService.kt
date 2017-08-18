@@ -38,7 +38,7 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackManager.PlaybackServic
     private lateinit var mPlaybackManager: PlaybackManager
 
     private val mSession by lazy { MediaSessionCompat(this, "MusicService") }
-    private var mMediaNotificationManager: MediaNotificationManager? = null
+    private val mMediaNotificationManager by lazy { MediaNotificationManager(this) }
 //    private var mSessionExtras: Bundle? = null
     private val mDelayedStopHandler = DelayedStopHandler(this)
 //    private var mMediaRouter: MediaRouter? = null
@@ -117,6 +117,7 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackManager.PlaybackServic
         LogHelper.d(TAG, "onDestroy")
         // 服务被杀死，确保已经释放所有资源
         mPlaybackManager.handleStopRequest(null)
+        mMediaNotificationManager.stopNotification()
 
         mDelayedStopHandler.removeCallbacksAndMessages(null)
         mSession.release()
@@ -167,7 +168,7 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackManager.PlaybackServic
     }
 
     override fun onNotificationRequired() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mMediaNotificationManager.startNotification()
     }
 
     /**
@@ -211,7 +212,7 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackManager.PlaybackServic
         override fun handleMessage(msg: Message) {
             val service = mWeakReference.get()
 
-            if (service?.mPlaybackManager?.playback?.isPlaying ?: false) {
+            if (service?.mPlaybackManager?.playback?.isPlaying == true) {
                 LogHelper.d(TAG, "Ignoring delayed stop since the media player is in use.")
                 return
             }

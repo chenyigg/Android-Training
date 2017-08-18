@@ -34,7 +34,7 @@ class MediaNotificationManager(private val mService: MusicService) : BroadcastRe
     private lateinit var mTransportControls: MediaControllerCompat.TransportControls
 
     private lateinit var mPlaybackState: PlaybackStateCompat
-    private lateinit var mMetadata: MediaMetadataCompat
+    private var mMetadata: MediaMetadataCompat? = null
 
     private val mNotificationManager = NotificationManagerCompat.from(mService)
 
@@ -190,6 +190,8 @@ class MediaNotificationManager(private val mService: MusicService) : BroadcastRe
     private fun createNotification(): Notification? {
         LogHelper.d(TAG, "updateNotificationMetadata. mMetadata=$mMetadata")
 
+        if (mMetadata == null) return null
+
         val notificationBuilder = NotificationCompat.Builder(mService)
         var playPauseButtonPosition = 0
 
@@ -213,7 +215,7 @@ class MediaNotificationManager(private val mService: MusicService) : BroadcastRe
                     mService.getString(R.string.label_next), mNextIntent)
         }
 
-        val description = mMetadata.description
+        val description = mMetadata?.description ?: return null
 
         var fetchArtUrl: String? = null
         var art: Bitmap? = null
@@ -309,7 +311,7 @@ class MediaNotificationManager(private val mService: MusicService) : BroadcastRe
                                         builder: NotificationCompat.Builder) {
         AlbumArtCache.fetch(bitmapUrl, object : AlbumArtCache.FetchListener() {
             override fun onFetched(artUrl: String, bigImage: Bitmap, iconImage: Bitmap) {
-                if (mMetadata.description?.iconUri.toString() == artUrl) {
+                if (mMetadata?.description?.iconUri.toString() == artUrl) {
                     // If the media is still the same, update the notification:
                     LogHelper.d(TAG, "fetchBitmapFromURLAsync: set bitmap to ", artUrl)
                     builder.setLargeIcon(bigImage)

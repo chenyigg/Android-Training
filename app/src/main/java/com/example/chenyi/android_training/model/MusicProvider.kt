@@ -14,15 +14,16 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import com.example.chenyi.android_training.util.MediaIDHelper.MEDIA_ID_MUSICS_BY_GENRE
 import com.example.chenyi.android_training.util.MediaIDHelper.MEDIA_ID_ROOT
+import kotlin.collections.HashMap
 
 /**
  * 简单的音乐数据提供者，真实的音乐数据委托给 MusicProviderSource 来获取
  * Created by chenyi on 17-8-9.
  */
-class MusicProvider(var mSource: MusicProviderSource = RemoteJSONSource()) {
+class MusicProvider(private var mSource: MusicProviderSource = RemoteJSONSource()) {
 
     // Categorized caches for music track data:
-    private var mMusicListByGenre = ConcurrentHashMap<String, List<MediaMetadataCompat>>()
+    private var mMusicListByGenre = HashMap<String, List<MediaMetadataCompat>>()
     private val mMusicListById by lazy { ConcurrentHashMap<String, MutableMediaMetadata>() }
     private val mFavoriteTracks by lazy { Collections.newSetFromMap(ConcurrentHashMap<String, Boolean>()) }
 
@@ -173,13 +174,12 @@ class MusicProvider(var mSource: MusicProviderSource = RemoteJSONSource()) {
         }.execute()
     }
 
-    @Synchronized fun buildListsByGenre() {
+    @Synchronized private fun buildListsByGenre() {
         val newMusicListByGenre = mMusicListById.values
                 .map { it.metadata }
                 .groupBy { it.getString(MediaMetadataCompat.METADATA_KEY_GENRE) }
-                as ConcurrentHashMap
 
-        mMusicListByGenre = newMusicListByGenre
+        mMusicListByGenre = newMusicListByGenre as HashMap<String, List<MediaMetadataCompat>>
     }
 
     @Synchronized private fun retrieveMedia() {

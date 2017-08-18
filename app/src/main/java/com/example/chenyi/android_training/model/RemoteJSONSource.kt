@@ -26,9 +26,7 @@ class RemoteJSONSource : MusicProviderSource {
             val jsonTracks = jsonObj?.getJSONArray(JSON_MUSIC)
 
             jsonTracks?.let {
-                for (j in 0..jsonTracks.length() - 1) {
-                    tracks[j] = buildFromJSON(jsonTracks.getJSONObject(j), path)
-                }
+                (0 until jsonTracks.length()).mapTo(tracks) { buildFromJSON(jsonTracks.getJSONObject(it), path) }
             }
 
             return tracks.iterator()
