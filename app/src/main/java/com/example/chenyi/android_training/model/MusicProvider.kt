@@ -92,7 +92,7 @@ class MusicProvider(private var mSource: MusicProviderSource = RemoteJSONSource(
         return searchMusic(MediaMetadataCompat.METADATA_KEY_ARTIST, query)
     }
 
-    internal fun searchMusic(metadataField: String, query1: String): Iterable<MediaMetadataCompat> {
+    private fun searchMusic(metadataField: String, query1: String): Iterable<MediaMetadataCompat> {
         if (mCurrentState != State.INITIALIZED) {
             return emptyList()
         }
@@ -141,13 +141,9 @@ class MusicProvider(private var mSource: MusicProviderSource = RemoteJSONSource(
         }
     }
 
-    fun isInitialized(): Boolean {
-        return mCurrentState == State.INITIALIZED
-    }
+    fun isInitialized(): Boolean = mCurrentState == State.INITIALIZED
 
-    fun isFavorite(musicId: String): Boolean {
-        return mFavoriteTracks.contains(musicId)
-    }
+    fun isFavorite(musicId: String): Boolean = mFavoriteTracks.contains(musicId)
 
     /**
      * Get the list of music tracks from a server and caches the track information

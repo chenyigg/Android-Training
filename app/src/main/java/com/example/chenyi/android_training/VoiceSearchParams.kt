@@ -38,10 +38,10 @@ class VoiceSearchParams
     var isArtistFocus: Boolean = false
     var isAlbumFocus: Boolean = false
     var isSongFocus: Boolean = false
-    lateinit var genre: String
-    lateinit var artist: String
-    lateinit var album: String
-    lateinit var song: String
+    var genre: String = ""
+    var artist: String = ""
+    var album: String = ""
+    var song: String = ""
 
     init {
 

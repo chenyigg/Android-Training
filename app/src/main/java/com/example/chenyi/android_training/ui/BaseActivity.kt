@@ -52,7 +52,7 @@ abstract class BaseActivity : ActionBarActivity(), MediaBrowserProvider {
 
     override fun getMediaBrowser(): MediaBrowserCompat = mMediaBrowser
 
-    protected fun onMediaControllerConnected() {
+    protected open fun onMediaControllerConnected() {
         // empty implementation, can be overridden by clients.
     }
 
@@ -103,7 +103,8 @@ abstract class BaseActivity : ActionBarActivity(), MediaBrowserProvider {
         if (shouldShowControls()) {
             showPlaybackControls()
         } else {
-            LogHelper.d(TAG, "connectionCallback.onConnected: " + "hiding controls because metadata is null")
+            LogHelper.d(TAG, "connectionCallback.onConnected: " +
+                    "hiding controls because metadata is null")
             hidePlaybackControls()
         }
 

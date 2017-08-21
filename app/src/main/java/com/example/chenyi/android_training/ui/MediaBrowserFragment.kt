@@ -38,13 +38,7 @@ class MediaBrowserFragment : Fragment() {
     private lateinit var mErrorMessage: TextView
 
     private var mMediaFragmentListener: MediaFragmentListener? = null
-    var mMediaId: String?
-        get() = arguments?.getString(ARG_MEDIA_ID)
-        set(value) {
-            val args = Bundle(1)
-            args.putString(MediaBrowserFragment.ARG_MEDIA_ID, value)
-            arguments = args
-        }
+    private var mMediaId: String? = null
 
     private val mConnectivityChangeReceiver = object : BroadcastReceiver() {
         private var oldOnline = false
@@ -105,6 +99,17 @@ class MediaBrowserFragment : Fragment() {
         }
     }
 
+    fun getMediaId(): String? {
+        val args = arguments
+        return args?.getString(ARG_MEDIA_ID)
+    }
+
+    fun setMediaId(mediaId: String?) {
+        val args = Bundle(1)
+        args.putString(MediaBrowserFragment.ARG_MEDIA_ID, mediaId)
+        arguments = args
+    }
+
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         mMediaFragmentListener = context as MediaFragmentListener
@@ -163,6 +168,7 @@ class MediaBrowserFragment : Fragment() {
     fun onConnected() {
         if (isDetached) return
 
+        mMediaId = getMediaId()
         if (mMediaId == null) {
             mMediaId = mMediaFragmentListener?.mediaBrowser?.root
         }

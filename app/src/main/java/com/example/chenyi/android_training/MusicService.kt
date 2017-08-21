@@ -104,7 +104,6 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackManager.PlaybackServic
                 // 将 intent 当做 media button 事件，发送给 MediaButtonReceiver
                 MediaButtonReceiver.handleIntent(mSession, intent)
             }
-
         }
 
         // 重置 delay handler，如果没有音乐播放将发送信息停止服务
@@ -125,16 +124,17 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackManager.PlaybackServic
 
     override fun onLoadChildren(parentId: String, result: Result<MutableList<MediaBrowserCompat.MediaItem>>) {
         LogHelper.d(TAG, "OnLoadChildren: parentMediaId=", parentId)
-        if (MediaIDHelper.MEDIA_ID_EMPTY_ROOT == parentId) {
-            result.sendResult(ArrayList())
-        } else if (mMusicProvider.isInitialized()) {
-            // 如果音乐库已经准备好，请立即返回
-            result.sendResult(mMusicProvider.getChildren(parentId, resources))
-        } else {
-            // 否则，只在检索音乐库时返回结果
-            result.detach()
-            mMusicProvider.retrieveMediaAsync {
+        when {
+            MediaIDHelper.MEDIA_ID_EMPTY_ROOT == parentId -> result.sendResult(ArrayList())
+            mMusicProvider.isInitialized() ->
+                // 如果音乐库已经准备好，请立即返回
                 result.sendResult(mMusicProvider.getChildren(parentId, resources))
+            else -> {
+                // 否则，只在检索音乐库时返回结果
+                result.detach()
+                mMusicProvider.retrieveMediaAsync {
+                    result.sendResult(mMusicProvider.getChildren(parentId, resources))
+                }
             }
         }
     }

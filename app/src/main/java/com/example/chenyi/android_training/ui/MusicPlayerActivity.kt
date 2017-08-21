@@ -12,7 +12,7 @@ import com.example.chenyi.android_training.util.LogHelper
 
 
 class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentListener {
-    private lateinit var mVoiceSearchParams: Bundle
+    private var mVoiceSearchParams: Bundle? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,8 +71,7 @@ class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentLi
         // 当 MediaSession 连接后，传人 extras 的信息
         if (intent?.action == MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH) {
             mVoiceSearchParams = intent.extras
-            LogHelper.d(TAG, "Starting from voice search query=",
-                    mVoiceSearchParams.getString(SearchManager.QUERY))
+            LogHelper.d(TAG, "Starting from voice search query=${mVoiceSearchParams?.getString(SearchManager.QUERY)}")
         } else {
             // 使用它已经有保存的媒体ID
             mediaId = savedInstanceState?.getString(SAVED_MEDIA_ID)
@@ -84,9 +83,9 @@ class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentLi
         LogHelper.d(TAG, "navigateToBrowser, mediaId=$mediaId")
         var fragment = getBrowseFragment()
 
-        if (fragment == null || fragment.mMediaId != mediaId) {
+        if (fragment == null || fragment.getMediaId() != mediaId) {
             fragment = MediaBrowserFragment()
-            fragment.mMediaId = mediaId
+            fragment.setMediaId(mediaId)
             val transaction = fragmentManager.beginTransaction()
             transaction.setCustomAnimations(
                     R.animator.slide_in_from_right, R.animator.slide_out_to_left,
@@ -101,11 +100,22 @@ class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentLi
 
     fun getMediaId(): String? {
         val fragment = getBrowseFragment() ?: return null
-        return fragment.mMediaId
+        return fragment.getMediaId()
     }
 
     private fun getBrowseFragment() =
             fragmentManager.findFragmentByTag(FRAGMENT_TAG) as MediaBrowserFragment?
+
+    override fun onMediaControllerConnected() {
+        // If there is a bootstrap parameter to start from a search query, we
+        // send it to the media session and set it to null, so it won't play again
+        // when the activity is stopped/started or recreated:
+        val query = mVoiceSearchParams?.getString(SearchManager.QUERY)
+        supportMediaController.transportControls
+                .playFromSearch(query, mVoiceSearchParams)
+        mVoiceSearchParams = null
+        getBrowseFragment()?.onConnected()
+    }
 
     companion object {
         private val TAG = LogHelper.makeLogTag(MusicPlayerActivity::class.java)
