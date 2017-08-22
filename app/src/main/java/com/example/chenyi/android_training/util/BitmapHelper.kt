@@ -18,8 +18,10 @@ object BitmapHelper {
     private val MAX_READ_LIMIT_PER_IMG = 1024 * 1024
 
     fun scaleBitmap(src: Bitmap, maxWidth: Int, maxHeight: Int): Bitmap {
-        val scaleFactor = Math.min(maxWidth / src.width, maxHeight / src.height)
-        return Bitmap.createScaledBitmap(src, scaleFactor * src.width, scaleFactor * src.height, false)
+        val scaleFactor = Math.min(
+                maxWidth.toDouble() / src.width, maxHeight.toDouble() / src.height)
+        return Bitmap.createScaledBitmap(src,
+                (src.width * scaleFactor).toInt(), (src.height * scaleFactor).toInt(), false)
     }
 
     fun scaleBitmap(scaleFactor: Int, inputStream: InputStream): Bitmap {

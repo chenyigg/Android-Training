@@ -17,11 +17,13 @@
         <activity android:name=".ui.MusicPlayerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <!-- 使用此意图过滤器获得语音搜索，如“播放披头士” -->
             <intent-filter>
                 <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -34,6 +36,9 @@
             </intent-filter>
         </service>
 
+        <activity android:name=".ui.FullScreenPlayerActivity"></activity>
+        <activity android:name=".ui.PlaceholderActivity" />
+        <activity android:name=".ui.NowPlayingActivity" />
     </application>
 
 </manifest>

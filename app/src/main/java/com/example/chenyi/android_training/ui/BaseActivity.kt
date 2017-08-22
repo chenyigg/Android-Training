@@ -50,7 +50,7 @@ abstract class BaseActivity : ActionBarActivity(), MediaBrowserProvider {
         mMediaBrowser.disconnect()
     }
 
-    override fun getMediaBrowser(): MediaBrowserCompat = mMediaBrowser
+    override fun getMediaBrowser() = mMediaBrowser
 
     protected open fun onMediaControllerConnected() {
         // empty implementation, can be overridden by clients.

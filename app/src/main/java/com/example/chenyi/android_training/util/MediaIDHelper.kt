@@ -58,13 +58,16 @@ object MediaIDHelper {
     </musicUniqueId></categoryValue></categoryType> */
     fun createMediaID(musicID: String?, vararg categories: String?): String {
         val sb = StringBuilder()
-        categories.forEach {
-            if (!isValidCategory(it)) {
-                throw IllegalArgumentException("Invalid category: " + it)
+        categories.forEachIndexed { i, _ ->
+            if (!isValidCategory(categories[i])) {
+                throw IllegalArgumentException("Invalid category: " + categories[i])
             }
-            sb.append(it)
+            sb.append(categories[i])
+            if (i < categories.size - 1) {
+                sb.append(CATEGORY_SEPARATOR)
+            }
         }
-        sb.append(CATEGORY_SEPARATOR)
+
         musicID?.let { sb.append(LEAF_SEPARATOR).append(musicID) }
 
         return sb.toString()

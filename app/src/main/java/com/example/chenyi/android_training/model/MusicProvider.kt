@@ -72,25 +72,22 @@ class MusicProvider(private var mSource: MusicProviderSource = RemoteJSONSource(
      * Very basic implementation of a search that filter music tracks with title containing
      * the given query.
      */
-    fun searchMusicBySongTitle(query: String): Iterable<MediaMetadataCompat> {
-        return searchMusic(MediaMetadataCompat.METADATA_KEY_TITLE, query)
-    }
+    fun searchMusicBySongTitle(query: String) =
+            searchMusic(MediaMetadataCompat.METADATA_KEY_TITLE, query)
 
     /**
      * Very basic implementation of a search that filter music tracks with album containing
      * the given query.
      */
-    fun searchMusicByAlbum(query: String): Iterable<MediaMetadataCompat> {
-        return searchMusic(MediaMetadataCompat.METADATA_KEY_ALBUM, query)
-    }
+    fun searchMusicByAlbum(query: String) =
+            searchMusic(MediaMetadataCompat.METADATA_KEY_ALBUM, query)
 
     /**
      * Very basic implementation of a search that filter music tracks with artist containing
      * the given query.
      */
-    fun searchMusicByArtist(query: String): Iterable<MediaMetadataCompat> {
-        return searchMusic(MediaMetadataCompat.METADATA_KEY_ARTIST, query)
-    }
+    fun searchMusicByArtist(query: String) =
+            searchMusic(MediaMetadataCompat.METADATA_KEY_ARTIST, query)
 
     private fun searchMusic(metadataField: String, query1: String): Iterable<MediaMetadataCompat> {
         if (mCurrentState != State.INITIALIZED) {
@@ -108,9 +105,7 @@ class MusicProvider(private var mSource: MusicProviderSource = RemoteJSONSource(
      * Return the MediaMetadataCompat for the given musicID.
      * @param musicId The unique, non-hierarchical music ID.
      */
-    fun getMusic(musicId: String): MediaMetadataCompat? {
-        return mMusicListById[musicId]?.metadata
-    }
+    fun getMusic(musicId: String) = mMusicListById[musicId]?.metadata
 
     @Synchronized fun updateMusicArt(musicId: String, albumArt: Bitmap, icon: Bitmap) {
         var metadata = getMusic(musicId)
@@ -209,7 +204,8 @@ class MusicProvider(private var mSource: MusicProviderSource = RemoteJSONSource(
 
         when {
             mediaId == MEDIA_ID_ROOT -> mediaItems.add(createBrowsableMediaItemForRoot(resources))
-            mediaId == MEDIA_ID_MUSICS_BY_GENRE -> getGenres().mapTo(mediaItems) { createBrowsableMediaItemForGenre(it, resources) }
+            mediaId == MEDIA_ID_MUSICS_BY_GENRE -> getGenres().mapTo(mediaItems) {
+                createBrowsableMediaItemForGenre(it, resources) }
             mediaId.startsWith(MEDIA_ID_MUSICS_BY_GENRE) -> {
                 val genre = MediaIDHelper.getHierarchy(mediaId)[1]
                 getMusicsByGenre(genre).mapTo(mediaItems) { createMediaItem(it) }

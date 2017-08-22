@@ -42,7 +42,7 @@ abstract class ActionBarActivity : AppCompatActivity() {
 
                 val activityClass: Class<*>? = when (mItemToOpenWhenDrawerCloses) {
                     R.id.navigation_allmusic -> MusicPlayerActivity::class.java
-//                    R.id.navigation_playlists -> PlaceholderActivity::class.java
+                    R.id.navigation_playlists -> PlaceholderActivity::class.java
                     else -> null
                 }
                 if (activityClass != null && activityClass != this@ActionBarActivity.javaClass) {
@@ -180,9 +180,9 @@ abstract class ActionBarActivity : AppCompatActivity() {
         if (MusicPlayerActivity::class.java!!.isAssignableFrom(javaClass)) {
             navigationView.setCheckedItem(R.id.navigation_allmusic)
         }
-//        else if (PlaceholderActivity::class.java!!.isAssignableFrom(javaClass)) {
-//            navigationView.setCheckedItem(R.id.navigation_playlists)
-//        }
+        else if (PlaceholderActivity::class.java!!.isAssignableFrom(javaClass)) {
+            navigationView.setCheckedItem(R.id.navigation_playlists)
+        }
     }
 
     protected fun updateDrawerToggle() {

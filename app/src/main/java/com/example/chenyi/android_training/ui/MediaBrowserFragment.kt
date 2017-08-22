@@ -1,5 +1,6 @@
 package com.example.chenyi.android_training.ui
 
+import android.annotation.TargetApi
 import android.app.Activity
 import android.app.Fragment
 import android.content.BroadcastReceiver
@@ -110,9 +111,15 @@ class MediaBrowserFragment : Fragment() {
         arguments = args
     }
 
+    @TargetApi(23)
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         mMediaFragmentListener = context as MediaFragmentListener
+    }
+
+    override fun onAttach(activity: Activity) {
+        super.onAttach(activity)
+        mMediaFragmentListener = activity as MediaFragmentListener
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -192,10 +199,12 @@ class MediaBrowserFragment : Fragment() {
         } else {
             // 否则，如果状态是错误和元数据!= null，使用播放状态错误信息:
             val controller = (activity as FragmentActivity).supportMediaController
+
             if (controller.metadata != null
                     && controller.playbackState != null
                     && controller.playbackState.state == PlaybackStateCompat.STATE_ERROR
                     && controller.playbackState.errorMessage != null) {
+                LogHelper.e(TAG, controller.playbackState.errorMessage)
                 mErrorMessage.text = controller.playbackState.errorMessage
                 showError = true
             } else if (forceError) {
@@ -235,8 +244,7 @@ class MediaBrowserFragment : Fragment() {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val item = getItem(position)
-            return MediaItemViewHolder.setupListView(context as Activity, convertView, parent,
-                    item)
+            return MediaItemViewHolder.setupListView(context as Activity, convertView, parent, item)
         }
     }
 

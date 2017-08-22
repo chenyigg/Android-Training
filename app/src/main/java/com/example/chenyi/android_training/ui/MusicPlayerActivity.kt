@@ -3,6 +3,7 @@ package com.example.chenyi.android_training.ui
 import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.provider.MediaStore
 import android.support.v4.media.MediaBrowserCompat
 import android.util.Log
@@ -40,7 +41,7 @@ class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentLi
         when {
             item.isPlayable -> supportMediaController.transportControls.playFromMediaId(item.mediaId, null)
             item.isBrowsable -> navigateToBrowser(item.mediaId)
-            else -> LogHelper.w(TAG, "Ignoring MediaItem that is neither browsable nor playable: ", "mediaId=${item.mediaId}")
+            else -> LogHelper.w(TAG, "Ignoring MediaItem that is neither browsable nor playable: mediaId=${item.mediaId}")
         }
     }
 
@@ -57,11 +58,11 @@ class MusicPlayerActivity : BaseActivity(), MediaBrowserFragment.MediaFragmentLi
 
     private fun startFullScreenActivityIfNeeded(intent: Intent?) {
         if (intent?.getBooleanExtra(EXTRA_START_FULLSCREEN, false) == true) {
-//            val fullScreenIntent = Intent(this, FullScreenPlayerActivity::class.java)
-//                    .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//                    .putExtra(EXTRA_CURRENT_MEDIA_DESCRIPTION,
-//                            intent.getParcelableExtra<Parcelable>(EXTRA_CURRENT_MEDIA_DESCRIPTION))
-//            startActivity(fullScreenIntent)
+            val fullScreenIntent = Intent(this, FullScreenPlayerActivity::class.java)
+                    .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(EXTRA_CURRENT_MEDIA_DESCRIPTION,
+                            intent.getParcelableExtra<Parcelable>(EXTRA_CURRENT_MEDIA_DESCRIPTION))
+            startActivity(fullScreenIntent)
         }
     }
 

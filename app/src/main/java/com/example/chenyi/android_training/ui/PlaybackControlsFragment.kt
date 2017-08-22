@@ -27,7 +27,7 @@ class PlaybackControlsFragment : Fragment() {
     private lateinit var mSubtitle: TextView
     private lateinit var mExtraInfo: TextView
     private lateinit var mAlbumArt: ImageView
-    private lateinit var mArtUrl: String
+    private var mArtUrl: String? = null
 
     private val mCallback = object : MediaControllerCompat.Callback() {
         override fun onPlaybackStateChanged(state: PlaybackStateCompat) {
@@ -125,7 +125,7 @@ class PlaybackControlsFragment : Fragment() {
 
         if (artUrl != mArtUrl) {
             mArtUrl = artUrl
-            val art = metadata.description?.iconBitmap ?: AlbumArtCache.getIconImage(mArtUrl)
+            val art = metadata.description?.iconBitmap ?: AlbumArtCache.getIconImage(mArtUrl!!)
             if (art != null) {
                 mAlbumArt.setImageBitmap(art)
             } else {
