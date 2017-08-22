@@ -207,6 +207,7 @@ class MediaBrowserFragment : Fragment() {
                 LogHelper.e(TAG, controller.playbackState.errorMessage)
                 mErrorMessage.text = controller.playbackState.errorMessage
                 showError = true
+
             } else if (forceError) {
                 // 最后，如果调用者请求显示错误，则显示一个通用消息:
                 mErrorMessage.setText(R.string.error_loading_media)
