@@ -18,7 +18,7 @@ class PlaybackManager(val resources: Resources,
                       val musicProvider: MusicProvider,
                       val queueManager: QueueManager,
                       var playback: Playback,
-                      val serviceCallback: PlaybackServiceCallback)
+                      private val serviceCallback: PlaybackServiceCallback)
     : Playback.Callback {
 
     val mediaSessionCallback = MediaSessionCallback()
@@ -85,6 +85,7 @@ class PlaybackManager(val resources: Resources,
             stateBuilder.setErrorMessage(error)
             state = PlaybackStateCompat.STATE_ERROR
         }
+
         //noinspection ResourceType
         stateBuilder.setState(state, position, 1.0f, SystemClock.elapsedRealtime())
 
@@ -231,35 +232,6 @@ class PlaybackManager(val resources: Resources,
                 updatePlaybackState(null)
             } else {
                 LogHelper.e(TAG, "Unsupported action: ", action)
-            }
-        }
-
-        /**
-         * Handle free and contextual searches.
-         *
-         *
-         * All voice searches on Android Auto are sent to this method through a connected
-         * [android.support.v4.media.session.MediaControllerCompat].
-         *
-         *
-         * Threads and async handling:
-         * Search, as a potentially slow operation, should run in another thread.
-         *
-         *
-         * Since this method runs on the main thread, most apps with non-trivial metadata
-         * should defer the actual search to another thread (for example, by using
-         * an [AsyncTask] as we do here).
-         */
-        override fun onPlayFromSearch(query: String, extras: Bundle) {
-            LogHelper.d(TAG, "playFromSearch  query=", query, " extras=", extras)
-
-            playback.state = PlaybackStateCompat.STATE_CONNECTING
-            val successSearch = queueManager.setQueueFromSearch(query, extras)
-            if (successSearch) {
-                handlePlayRequest()
-                queueManager.updateMetadata()
-            } else {
-                updatePlaybackState("Could not find music")
             }
         }
     }

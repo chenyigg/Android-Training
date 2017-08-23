@@ -17,8 +17,6 @@ package com.example.chenyi.android_training.util
 
 import android.util.Log
 import com.example.chenyi.android_training.BuildConfig
-import javax.security.auth.login.LoginException
-
 
 object LogHelper {
 

@@ -60,7 +60,7 @@ class FullScreenPlayerActivity : ActionBarActivity() {
 
     private val mExecutorService = Executors.newSingleThreadScheduledExecutor()
 
-    private lateinit var mScheduleFuture: ScheduledFuture<*>
+    private var mScheduleFuture: ScheduledFuture<*>? = null
     private lateinit var mLastPlaybackState: PlaybackStateCompat
 
     private val mCallback = object : MediaControllerCompat.Callback() {
@@ -160,6 +160,10 @@ class FullScreenPlayerActivity : ActionBarActivity() {
 
     }
 
+    override fun initializeToolbar() {
+        mToolbarInitialized = true
+    }
+
     @Throws(RemoteException::class)
     private fun connectToSession(token: MediaSessionCompat.Token) {
         val mediaController = MediaControllerCompat(this, token)
@@ -200,7 +204,7 @@ class FullScreenPlayerActivity : ActionBarActivity() {
     }
 
     private fun stopSeekbarUpdate() {
-        mScheduleFuture.cancel(false)
+        mScheduleFuture?.cancel(false)
     }
 
     override fun onStart() {

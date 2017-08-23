@@ -29,7 +29,7 @@ abstract class ActionBarActivity : AppCompatActivity() {
     private var mDrawerLayout: DrawerLayout? = null
     private var mDrawerToggle: ActionBarDrawerToggle? = null
 
-    private var mToolbarInitialized: Boolean = false
+    internal var mToolbarInitialized: Boolean = false
 
     private var mItemToOpenWhenDrawerCloses = -1
 
@@ -147,7 +147,7 @@ abstract class ActionBarActivity : AppCompatActivity() {
         mToolbar.setTitle(titleId)
     }
 
-    protected fun initializeToolbar() {
+    protected open fun initializeToolbar() {
         mToolbar = find(R.id.toolbar)
 
         mToolbar.inflateMenu(R.menu.drawer)

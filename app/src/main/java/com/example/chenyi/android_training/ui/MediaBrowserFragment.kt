@@ -204,7 +204,6 @@ class MediaBrowserFragment : Fragment() {
                     && controller.playbackState != null
                     && controller.playbackState.state == PlaybackStateCompat.STATE_ERROR
                     && controller.playbackState.errorMessage != null) {
-                LogHelper.e(TAG, controller.playbackState.errorMessage)
                 mErrorMessage.text = controller.playbackState.errorMessage
                 showError = true
 

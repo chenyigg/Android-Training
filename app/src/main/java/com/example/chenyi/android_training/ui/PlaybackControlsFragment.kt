@@ -1,6 +1,7 @@
 package com.example.chenyi.android_training.ui
 
 import android.app.Fragment
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
@@ -70,16 +71,16 @@ class PlaybackControlsFragment : Fragment() {
         mAlbumArt = view.find(R.id.album_art)
 
         view.setOnClickListener {
-            //            val intent = Intent(activity, FullScreenPlayerActivity::class.java)
-//            intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-//            val controller = (activity as FragmentActivity)
-//                    .supportMediaController
-//            val metadata = controller.metadata
-//            if (metadata != null) {
-//                intent.putExtra(MusicPlayerActivity.EXTRA_CURRENT_MEDIA_DESCRIPTION,
-//                        metadata.description)
-//            }
-//            startActivity(intent)
+            val intent = Intent(activity, FullScreenPlayerActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+            val controller = (activity as FragmentActivity)
+                    .supportMediaController
+            val metadata = controller.metadata
+            if (metadata != null) {
+                intent.putExtra(MusicPlayerActivity.EXTRA_CURRENT_MEDIA_DESCRIPTION,
+                        metadata.description)
+            }
+            startActivity(intent)
         }
 
         return view

@@ -36,7 +36,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ui.FullScreenPlayerActivity"></activity>
+        <activity android:name=".ui.FullScreenPlayerActivity"/>
         <activity android:name=".ui.PlaceholderActivity" />
         <activity android:name=".ui.NowPlayingActivity" />
     </application>

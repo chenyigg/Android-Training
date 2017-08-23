@@ -34,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.chenyi.android_training.R;
+import com.example.chenyi.android_training.util.LogHelper;
 import com.example.chenyi.android_training.util.MediaIDHelper;
 
 public class MediaItemViewHolder {

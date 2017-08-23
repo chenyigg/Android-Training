@@ -18,7 +18,6 @@ import com.example.chenyi.android_training.model.MusicProvider
 import com.example.chenyi.android_training.playback.LocalPlayback
 import com.example.chenyi.android_training.playback.PlaybackManager
 import com.example.chenyi.android_training.playback.QueueManager
-import com.example.chenyi.android_training.ui.NowPlayingActivity
 import com.example.chenyi.android_training.util.LogHelper
 import com.example.chenyi.android_training.util.MediaIDHelper
 import com.google.android.gms.cast.framework.CastSession
@@ -88,11 +87,11 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackManager.PlaybackServic
         mSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
                 or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
 
-        val context = applicationContext
-        val intent = Intent(context, NowPlayingActivity::class.java)
-        val pi = PendingIntent.getActivity(context, 99 /*request code*/,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        mSession.setSessionActivity(pi)
+//        val context = applicationContext
+//        val intent = Intent(context, NowPlayingActivity::class.java)
+//        val pi = PendingIntent.getActivity(context, 99 /*request code*/,
+//                intent, PendingIntent.FLAG_UPDATE_CURRENT)
+//        mSession.setSessionActivity(pi)
 
         mPlaybackManager.updatePlaybackState(null)
     }
@@ -179,7 +178,7 @@ class MusicService : MediaBrowserServiceCompat(), PlaybackManager.PlaybackServic
         mSession.isActive = false
         // 重置 delay handler，因此在停止延迟后将再次执行，有可能停止服务。
         mDelayedStopHandler.removeCallbacksAndMessages(null)
-        mDelayedStopHandler.sendEmptyMessageDelayed(0, STOP_DELAY.toLong())
+        mDelayedStopHandler.sendEmptyMessageDelayed(0, STOP_DELAY)
         stopForeground(true)
     }
 
